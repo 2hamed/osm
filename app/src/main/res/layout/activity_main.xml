@@ -8,8 +8,8 @@
 	android:layout_height="match_parent"
 	tools:context="com.hmomeni.osm.MainActivity">
 
-	<org.osmdroid.views.MapView
-		android:id="@+id/map"
+	<FrameLayout
+		android:id="@+id/mapWrapper"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"/>
 
