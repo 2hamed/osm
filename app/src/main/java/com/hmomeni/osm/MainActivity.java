@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import com.hmomeni.osm.tools.MapsForgeTileProvider;
 import com.hmomeni.osm.tools.MapsForgeTileSource;
+import com.hmomeni.osm.tools.Util;
 
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.config.Configuration;
@@ -38,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	MapView map;
 	NestedScrollView bottomSheet;
 	LinearLayout layerWrapper;
-	BottomSheetBehavior<NestedScrollView> bottomSheetBehavior;
 	Button openLayers;
 	public static final int baseId = 6161;
 	List<KmlDocument> kmlDocuments = new ArrayList<>();
@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		mapWrapper = (FrameLayout) findViewById(R.id.mapWrapper);
 		bottomSheet = (NestedScrollView) findViewById(R.id.bottomSheet);
 		layerWrapper = (LinearLayout) findViewById(R.id.layerWrapper);
-		bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 		openLayers = (Button) findViewById(R.id.openLayers);
 		openLayers.setOnClickListener(this);
 
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		mapWrapper.addView(map);
 		map.setTileSource(TileSourceFactory.MAPNIK);
 
-//		map.setBuiltInZoomControls(true);
 		map.setMultiTouchControls(true);
 		loadKmlFiles();
 
@@ -112,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.openLayers:
-				bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 				break;
 			case baseId: {
 				int index = (int) v.getTag();
@@ -120,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				BoundingBox bb = kmlDocument.mKmlRoot.getBoundingBox();
 				map.getController().setZoom(9);
 				map.zoomToBoundingBox(bb, true);
-				bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 			}
 		}
 	}
