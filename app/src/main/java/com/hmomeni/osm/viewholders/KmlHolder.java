@@ -1,6 +1,7 @@
 package com.hmomeni.osm.viewholders;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +31,12 @@ public class KmlHolder extends SimpleRecyclerHolder<KmlObject, KmlListCallback> 
 	public void bindView(Context context, KmlObject kmlObject) {
 		title.setText(kmlObject.getKmlFile().getName());
 		color.setBackgroundColor(kmlObject.getLayerColor());
+
+		if (kmlObject.isSelected()) {
+			title.setTextColor(Color.BLACK);
+		} else {
+			title.setTextColor(Color.GRAY);
+		}
 	}
 
 	@Override

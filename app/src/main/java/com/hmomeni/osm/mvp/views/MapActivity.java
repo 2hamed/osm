@@ -4,25 +4,32 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.hmomeni.osm.R;
+import com.hmomeni.osm.interfaces.KmlFragmentInterface;
 import com.hmomeni.osm.mvp.IMapView;
 import com.hmomeni.osm.mvp.presenters.MapPresenter;
+import com.hmomeni.osm.objects.KmlObject;
 import com.hmomeni.osm.tools.MapsForgeTileProvider;
 
+import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.FolderOverlay;
 
 import java.io.File;
+import java.util.Map;
 
-public class MapActivity extends AppCompatActivity implements IMapView {
+public class MapActivity extends AppCompatActivity implements IMapView, KmlFragmentInterface {
 	MapPresenter mPresenter;
-	private DrawerLayout activityMap;
 	private FrameLayout mapWrapper;
+
+	Map<String, Integer> layerMap = new ArrayMap<>();
+	private MapView mapView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +70,7 @@ public class MapActivity extends AppCompatActivity implements IMapView {
 		if (mapWrapper.getChildCount() > 0) {
 			mapWrapper.removeAllViews();
 		}
-		MapView mapView = new MapView(this, mapsForgeTileProvider);
+		mapView = new MapView(this, mapsForgeTileProvider);
 		mapView.setMultiTouchControls(true);
 		mapWrapper.addView(mapView);
 
@@ -72,7 +79,23 @@ public class MapActivity extends AppCompatActivity implements IMapView {
 	}
 
 	private void initView() {
-		activityMap = (DrawerLayout) findViewById(R.id.activity_map);
 		mapWrapper = (FrameLayout) findViewById(R.id.mapWrapper);
+	}
+
+	@Override
+	public void addKmlObjectAdd(KmlObject kmlObject) {
+		int index = layerMap.size();
+		layerMap.put(kmlObject.getKmlFile().getName(), index);
+		KmlDocument kmlDocument = new KmlDocument();
+		kmlDocument.parseKMLFile(kmlObject.getKmlFile());
+
+		FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(mapView, null, null, kmlDocument);
+
+		mapView.getOverlayManager().add(index, kmlOverlay);
+	}
+
+	@Override
+	public void removeKmlObject(KmlObject kmlObject) {
+
 	}
 }

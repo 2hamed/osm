@@ -16,6 +16,7 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.hmomeni.osm.R;
+import com.hmomeni.osm.interfaces.KmlFragmentInterface;
 import com.hmomeni.osm.interfaces.KmlListCallback;
 import com.hmomeni.osm.mvp.KmlListView;
 import com.hmomeni.osm.mvp.presenters.KmlListPresenter;
@@ -36,6 +37,8 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 	KmlListPresenter mPresenter;
 	SimpleRecyclerAdapter<KmlObject, KmlListCallback> mAdapter;
 	List<KmlObject> kmlObjects = new ArrayList<>();
+	KmlFragmentInterface kmlFragmentInterface;
+
 
 	@Nullable
 	@Override
@@ -53,6 +56,13 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 		return rootView;
+	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+
+		kmlFragmentInterface = (KmlFragmentInterface) context;
 	}
 
 	@Override
