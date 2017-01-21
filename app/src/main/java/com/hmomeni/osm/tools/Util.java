@@ -70,7 +70,7 @@ public class Util {
 		}
 	}
 
-	static int[] colors = new int[]{
+	private static int[] colors = new int[]{
 			Color.parseColor("#ff1744"),
 			Color.parseColor("#d50000"),
 			Color.parseColor("#f06292"),
@@ -87,7 +87,7 @@ public class Util {
 		return colors[randInt(0, colors.length - 1)];
 	}
 
-	static Random rand = new Random();
+	private static Random rand = new Random();
 
 	public static int randInt(int min, int max) {
 		return rand.nextInt((max - min) + 1) + min;
