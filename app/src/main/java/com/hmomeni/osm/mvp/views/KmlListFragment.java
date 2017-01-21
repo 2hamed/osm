@@ -1,6 +1,7 @@
 package com.hmomeni.osm.mvp.views;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.hmomeni.osm.R;
 import com.hmomeni.osm.interfaces.KmlListCallback;
 import com.hmomeni.osm.mvp.KmlListView;
@@ -86,6 +90,23 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 
 	@Override
 	public void onItemClicked(int position) {
+		kmlObjects.get(position).setSelected(!kmlObjects.get(position).isSelected());
+		mAdapter.notifyItemChanged(position);
+	}
 
+	@Override
+	public void onColorClicked(final int position) {
+		ColorPickerDialogBuilder
+				.with(getContext())
+				.initialColor(kmlObjects.get(position).getLayerColor())
+				.setPositiveButton(R.string.pick_color, new ColorPickerClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
+						kmlObjects.get(position).setLayerColor(i);
+						mAdapter.notifyItemChanged(position);
+					}
+				})
+				.wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+				.build().show();
 	}
 }

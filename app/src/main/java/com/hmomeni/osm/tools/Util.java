@@ -2,6 +2,7 @@ package com.hmomeni.osm.tools;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Random;
 
 /**
  * Created by hamed on 1/13/17.
@@ -68,7 +70,26 @@ public class Util {
 		}
 	}
 
+	static int[] colors = new int[]{
+			Color.parseColor("#ff1744"),
+			Color.parseColor("#d50000"),
+			Color.parseColor("#f06292"),
+			Color.parseColor("#c2185b"),
+			Color.parseColor("#c51162"),
+			Color.parseColor("#ba68c8"),
+			Color.parseColor("#ff5722"),
+			Color.parseColor("#ffc107"),
+			Color.parseColor("#69f0ae"),
+
+	};
+
 	public static int generateRandomColor() {
-		return 0;
+		return colors[randInt(0, colors.length - 1)];
+	}
+
+	static Random rand = new Random();
+
+	public static int randInt(int min, int max) {
+		return rand.nextInt((max - min) + 1) + min;
 	}
 }

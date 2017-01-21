@@ -9,6 +9,7 @@ import java.io.File;
 public class KmlObject {
 	private File kmlFile;
 	private int layerColor;
+	private boolean selected = false;
 
 	public KmlObject(File kmlFile, int layerColor) {
 		this.kmlFile = kmlFile;
@@ -29,5 +30,13 @@ public class KmlObject {
 
 	public void setLayerColor(int layerColor) {
 		this.layerColor = layerColor;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }

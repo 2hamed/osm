@@ -1,4 +1,5 @@
 <resources>
 	<string name="app_name">osm</string>
 	<string name="no_kml_file_found">No KML file found in %s</string>
+	<string name="pick_color">Pick Color</string>
 </resources>

@@ -6,4 +6,6 @@ package com.hmomeni.osm.interfaces;
 
 public interface KmlListCallback {
 	void onItemClicked(int position);
+
+	void onColorClicked(int position);
 }
