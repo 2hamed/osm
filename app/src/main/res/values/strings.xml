@@ -2,4 +2,9 @@
 	<string name="app_name">osm</string>
 	<string name="no_kml_file_found">No KML file found in %s</string>
 	<string name="pick_color">Pick Color</string>
+
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="no_map_file_found">No Map file found in %s</string>
+	<string name="select_map_first">Select a map first</string>
 </resources>

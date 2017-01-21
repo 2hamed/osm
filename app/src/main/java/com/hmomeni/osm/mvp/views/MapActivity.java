@@ -3,14 +3,19 @@ package com.hmomeni.osm.mvp.views;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hmomeni.osm.R;
 import com.hmomeni.osm.interfaces.KmlFragmentInterface;
+import com.hmomeni.osm.interfaces.MapListFragmentInterface;
 import com.hmomeni.osm.mvp.IMapView;
 import com.hmomeni.osm.mvp.presenters.MapPresenter;
 import com.hmomeni.osm.objects.KmlObject;
@@ -36,9 +41,11 @@ import org.osmdroid.views.overlay.Polyline;
 import java.io.File;
 import java.util.Map;
 
-public class MapActivity extends AppCompatActivity implements IMapView, KmlFragmentInterface {
+public class MapActivity extends AppCompatActivity implements IMapView, KmlFragmentInterface, MapListFragmentInterface, View.OnClickListener {
 	MapPresenter mPresenter;
 	private FrameLayout mapWrapper;
+	private DrawerLayout drawerLayout;
+	private ImageView mapBtn, kmlBtn;
 
 	Map<String, Integer> layerMap = new ArrayMap<>();
 	private MapView mapView;
@@ -62,7 +69,6 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 	protected void onStart() {
 		super.onStart();
 		mPresenter.attach(this);
-		mPresenter.loadMapFile(new File(Environment.getExternalStorageDirectory(), "iran.map"));
 	}
 
 	@Override
@@ -92,10 +98,21 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 
 	private void initView() {
 		mapWrapper = (FrameLayout) findViewById(R.id.mapWrapper);
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+		mapBtn = (ImageView) findViewById(R.id.mapMenu);
+		kmlBtn = (ImageView) findViewById(R.id.kmlMenu);
+		mapBtn.setOnClickListener(this);
+		kmlBtn.setOnClickListener(this);
 	}
 
 	@Override
 	public void addKmlObjectAdd(final KmlObject kmlObject) {
+		if (mapView == null) {
+			Toast.makeText(this, R.string.select_map_first, Toast.LENGTH_SHORT).show();
+			drawerLayout.closeDrawer(Gravity.RIGHT);
+			drawerLayout.openDrawer(Gravity.LEFT);
+			return;
+		}
 		int index = layerMap.size();
 		layerMap.put(kmlObject.getKmlFile().getName(), index);
 		KmlDocument kmlDocument = new KmlDocument();
@@ -140,5 +157,23 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 		mapView.getOverlayManager().remove(index);
 		layerMap.remove(kmlObject.getKmlFile().getName());
 		mapView.invalidate();
+	}
+
+	@Override
+	public void onMapFileClicked(File mapFile) {
+		mPresenter.loadMapFile(mapFile);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.mapMenu: {
+				drawerLayout.openDrawer(Gravity.LEFT);
+				break;
+			}
+			case R.id.kmlMenu: {
+				drawerLayout.openDrawer(Gravity.RIGHT);
+			}
+		}
 	}
 }
