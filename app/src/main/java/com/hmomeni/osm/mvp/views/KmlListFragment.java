@@ -100,8 +100,14 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 
 	@Override
 	public void onItemClicked(int position) {
-		kmlObjects.get(position).setSelected(!kmlObjects.get(position).isSelected());
+		boolean newState = !kmlObjects.get(position).isSelected();
+		kmlObjects.get(position).setSelected(newState);
 		mAdapter.notifyItemChanged(position);
+		if (newState) {
+			kmlFragmentInterface.addKmlObjectAdd(kmlObjects.get(position));
+		} else {
+			kmlFragmentInterface.removeKmlObject(kmlObjects.get(position));
+		}
 	}
 
 	@Override
@@ -112,8 +118,11 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 				.setPositiveButton(R.string.pick_color, new ColorPickerClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
-						kmlObjects.get(position).setLayerColor(i);
+						KmlObject kmlObject = kmlObjects.get(position);
+						kmlObject.setLayerColor(i);
 						mAdapter.notifyItemChanged(position);
+						kmlFragmentInterface.removeKmlObject(kmlObject);
+						kmlFragmentInterface.addKmlObjectAdd(kmlObject);
 					}
 				})
 				.wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)

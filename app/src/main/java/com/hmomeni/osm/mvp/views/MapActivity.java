@@ -1,6 +1,7 @@
 package com.hmomeni.osm.mvp.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -16,10 +17,21 @@ import com.hmomeni.osm.objects.KmlObject;
 import com.hmomeni.osm.tools.MapsForgeTileProvider;
 
 import org.osmdroid.bonuspack.kml.KmlDocument;
+import org.osmdroid.bonuspack.kml.KmlFeature;
+import org.osmdroid.bonuspack.kml.KmlLineString;
+import org.osmdroid.bonuspack.kml.KmlPlacemark;
+import org.osmdroid.bonuspack.kml.KmlPoint;
+import org.osmdroid.bonuspack.kml.KmlPolygon;
+import org.osmdroid.bonuspack.kml.KmlTrack;
+import org.osmdroid.bonuspack.kml.Style;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.Polygon;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.io.File;
 import java.util.Map;
@@ -83,19 +95,50 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 	}
 
 	@Override
-	public void addKmlObjectAdd(KmlObject kmlObject) {
+	public void addKmlObjectAdd(final KmlObject kmlObject) {
 		int index = layerMap.size();
 		layerMap.put(kmlObject.getKmlFile().getName(), index);
 		KmlDocument kmlDocument = new KmlDocument();
 		kmlDocument.parseKMLFile(kmlObject.getKmlFile());
+		Style style = new Style(null, Color.RED, 500, Color.GREEN);
+		FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(mapView, style, new KmlFeature.Styler() {
+			@Override
+			public void onFeature(Overlay overlay, KmlFeature kmlFeature) {
 
-		FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(mapView, null, null, kmlDocument);
+			}
+
+			@Override
+			public void onPoint(Marker marker, KmlPlacemark kmlPlacemark, KmlPoint kmlPoint) {
+
+			}
+
+			@Override
+			public void onLineString(Polyline polyline, KmlPlacemark kmlPlacemark, KmlLineString kmlLineString) {
+				polyline.setColor(kmlObject.getLayerColor());
+			}
+
+			@Override
+			public void onPolygon(Polygon polygon, KmlPlacemark kmlPlacemark, KmlPolygon kmlPolygon) {
+				polygon.setStrokeColor(kmlObject.getLayerColor());
+			}
+
+			@Override
+			public void onTrack(Polyline polyline, KmlPlacemark kmlPlacemark, KmlTrack kmlTrack) {
+				polyline.setColor(kmlObject.getLayerColor());
+			}
+		}, kmlDocument);
 
 		mapView.getOverlayManager().add(index, kmlOverlay);
+		mapView.zoomToBoundingBox(kmlDocument.mKmlRoot.getBoundingBox(), false);
+		mapView.getController().setZoom(13);
+
 	}
 
 	@Override
 	public void removeKmlObject(KmlObject kmlObject) {
-
+		int index = layerMap.get(kmlObject.getKmlFile().getName());
+		mapView.getOverlayManager().remove(index);
+		layerMap.remove(kmlObject.getKmlFile().getName());
+		mapView.invalidate();
 	}
 }
