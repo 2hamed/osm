@@ -16,9 +16,6 @@
 		android:largeHeap="true"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name=".MainActivity">
-
-		</activity>
 		<activity android:name=".mvp.views.MapActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
