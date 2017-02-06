@@ -106,7 +106,7 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 	}
 
 	@Override
-	public void addKmlObjectAdd(final KmlObject kmlObject) {
+	public void addKmlObject(final KmlObject kmlObject) {
 		if (mapView == null) {
 			Toast.makeText(this, R.string.select_map_first, Toast.LENGTH_SHORT).show();
 			drawerLayout.closeDrawer(Gravity.RIGHT);

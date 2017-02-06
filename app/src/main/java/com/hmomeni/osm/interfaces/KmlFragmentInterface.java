@@ -7,7 +7,7 @@ import com.hmomeni.osm.objects.KmlObject;
  */
 
 public interface KmlFragmentInterface {
-	void addKmlObjectAdd(KmlObject kmlObject);
+	void addKmlObject(KmlObject kmlObject);
 
 	void removeKmlObject(KmlObject kmlObject);
 }

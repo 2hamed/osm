@@ -104,7 +104,7 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 		kmlObjects.get(position).setSelected(newState);
 		mAdapter.notifyItemChanged(position);
 		if (newState) {
-			kmlFragmentInterface.addKmlObjectAdd(kmlObjects.get(position));
+			kmlFragmentInterface.addKmlObject(kmlObjects.get(position));
 		} else {
 			kmlFragmentInterface.removeKmlObject(kmlObjects.get(position));
 		}
@@ -122,7 +122,7 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 						kmlObject.setLayerColor(i);
 						mAdapter.notifyItemChanged(position);
 						kmlFragmentInterface.removeKmlObject(kmlObject);
-						kmlFragmentInterface.addKmlObjectAdd(kmlObject);
+						kmlFragmentInterface.addKmlObject(kmlObject);
 					}
 				})
 				.wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
