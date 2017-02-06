@@ -19,6 +19,8 @@ public class MapListPresenter extends BasePresenter<IMapListView> {
 	private Handler handler = new Handler();
 
 	public void loadMapFiles() {
+
+		// read all .map files from disk and pass them on to MapListFragment
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

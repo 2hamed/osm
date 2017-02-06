@@ -47,7 +47,9 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 	private DrawerLayout drawerLayout;
 	private ImageView mapBtn, kmlBtn;
 
+	// this is to keep all the active KML layers so that we can remove them
 	Map<String, Integer> layerMap = new ArrayMap<>();
+
 	private MapView mapView;
 
 	@Override
@@ -85,9 +87,12 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 	@Override
 	public void onMapTileLoaded(BoundingBox boundingBox,
 	                            MapsForgeTileProvider mapsForgeTileProvider) {
+		//let's check if we already have a map loaded and remove it
 		if (mapWrapper.getChildCount() > 0) {
 			mapWrapper.removeAllViews();
 		}
+
+		//load the selected file map on to the MapView object
 		mapView = new MapView(this, mapsForgeTileProvider);
 		mapView.setMultiTouchControls(true);
 		mapWrapper.addView(mapView);
@@ -118,6 +123,9 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 		KmlDocument kmlDocument = new KmlDocument();
 		kmlDocument.parseKMLFile(kmlObject.getKmlFile());
 		Style style = new Style(null, Color.RED, 500, Color.GREEN);
+
+		// since kml object colors are not applied automatically
+		// we use this Style class to apply the color
 		FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(mapView, style, new KmlFeature.Styler() {
 			@Override
 			public void onFeature(Overlay overlay, KmlFeature kmlFeature) {
@@ -145,6 +153,7 @@ public class MapActivity extends AppCompatActivity implements IMapView, KmlFragm
 			}
 		}, kmlDocument);
 
+		//let's zoom in on the selected layer
 		mapView.getOverlayManager().add(index, kmlOverlay);
 		mapView.zoomToBoundingBox(kmlDocument.mKmlRoot.getBoundingBox(), false);
 		mapView.getController().setZoom(13);

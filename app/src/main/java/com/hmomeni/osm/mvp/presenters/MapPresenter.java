@@ -25,9 +25,11 @@ import java.io.InputStream;
 public class MapPresenter extends BasePresenter<IMapView> implements IRegisterReceiver,
                                                                      IFilesystemCache {
 	public void loadMapFile(File mapFile) {
+
 		MapsForgeTileSource.createInstance((Application) getView().getViewContext().getApplicationContext());
 		MapsForgeTileSource mapsForgeTileSource = MapsForgeTileSource.createFromFiles(new File[]{mapFile});
 		MapsForgeTileProvider mapsForgeTileProvider = new MapsForgeTileProvider(this, mapsForgeTileSource, this);
+
 		if (isAttached()) {
 			getView().onMapTileLoaded(mapsForgeTileSource.getBoundsOsmdroid(), mapsForgeTileProvider);
 		}

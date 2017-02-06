@@ -103,6 +103,10 @@ public class KmlListFragment extends Fragment implements KmlListView, KmlListCal
 		boolean newState = !kmlObjects.get(position).isSelected();
 		kmlObjects.get(position).setSelected(newState);
 		mAdapter.notifyItemChanged(position);
+
+		// we detect if we are going to add or remove this kmlObject and inform MapActivity
+		// to do accordingly
+
 		if (newState) {
 			kmlFragmentInterface.addKmlObject(kmlObjects.get(position));
 		} else {

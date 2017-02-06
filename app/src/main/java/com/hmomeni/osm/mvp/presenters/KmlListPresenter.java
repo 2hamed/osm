@@ -21,6 +21,8 @@ public class KmlListPresenter extends BasePresenter<KmlListView> {
 	private Handler handler = new Handler();
 
 	public void loadKmlFiles() {
+
+		//read all .kml files from disk and pass them on to KmlListFragment
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

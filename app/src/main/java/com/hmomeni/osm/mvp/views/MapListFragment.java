@@ -84,6 +84,7 @@ public class MapListFragment extends Fragment implements IMapListView, MapListCa
 
 	@Override
 	public void onItemClicked(int position) {
+		// here we inform MapActivity to load the selected .map file
 		mapListFragmentInterface.onMapFileClicked(files.get(position));
 	}
 }
